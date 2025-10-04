@@ -2,11 +2,11 @@
 FROM node:18 AS build
 WORKDIR /app
 
-# Copy package.json & package-lock.json
+# Copy package.json & package-lock.json first
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (ignore peer issues)
+RUN npm cache clean --force && npm install --legacy-peer-deps
 
 # Copy Angular source
 COPY . ./
@@ -23,8 +23,5 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy compiled Angular build from stage 1
 COPY --from=build /app/dist/delivery-frontend /usr/share/nginx/html
 
-# Expose port
 EXPOSE 80
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
