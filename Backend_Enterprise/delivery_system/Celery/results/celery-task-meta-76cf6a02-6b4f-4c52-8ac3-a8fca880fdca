@@ -1,0 +1,1 @@
+{"status": "SUCCESS", "result": {"error": "Failed to process log file with python-evtx: name 'evtx' is not defined"}, "traceback": null, "children": [], "date_done": "2025-09-25T06:53:22.566048+00:00", "task_id": "76cf6a02-6b4f-4c52-8ac3-a8fca880fdca"}

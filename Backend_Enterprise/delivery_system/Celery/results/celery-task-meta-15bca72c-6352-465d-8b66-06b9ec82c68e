@@ -1,0 +1,1 @@
+{"status": "FAILURE", "result": {"exc_type": "NotRegistered", "exc_message": ["logfile.tasks.process_windows_event_logs"], "exc_module": "celery.exceptions"}, "traceback": null, "children": [], "date_done": "2025-09-25T08:14:48.513515+00:00", "task_id": "15bca72c-6352-465d-8b66-06b9ec82c68e"}

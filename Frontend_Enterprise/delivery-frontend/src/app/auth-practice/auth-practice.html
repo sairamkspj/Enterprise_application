@@ -1,0 +1,60 @@
+<p>auth-practice works!</p>
+<div class="auth-wrap">
+    <div class="tab-row">
+        <div class="tab" [class.active]="activePanel==='login'" (click)="setActive('login')" >Login</div>
+        <div class="tab" [class.active]="activePanel==='signup'" (click)="setActive('signup')">Sign in</div>
+    </div>
+    <div class="forms-viewport">
+        <div class="forms" [style.transform]="activePanel==='login' ? 'translateX(0%)' : 'translateX(-50%)'">
+                <form class="panel" [class.active]="activePanel==='login'" [class.inactive]="activePanel!=='login'">
+                    <h2>Welcome Back!</h2>
+                    <label>Username</label>
+                    <input #loginUser type="text" placeholder="Enter username">
+                    <label>Password</label>
+                    <input #loginPass type="password" placeholder="Enter password">
+                    <button type="button" (click)="onLogin(loginUser.value, loginPass.value)">Login</button>
+                    <p>Don't have an account? <a (click)="setActive('signup')">Sign Up</a></p>
+                </form>
+
+                
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="tab-row">
+        <div class="tab" [class.active]="activePanel==='login'" (click)="setActive('login')" >Login</div>
+        <div class="tab" [class.active]="activePanel==='signup'" (click)="setActive('signup')">Sign in</div>
+        
+    </div>
+   <div class="forms-viewport">
+        <div class="forms" [style.transform]="activePanel==='login' ? 'translateX(0%)' : 'translateX(-50%)'">
+
+        LOGIN
+            <form class="panel" [class.active]="activePanel==='login'" [class.inactive]="activePanel!=='login'">
+                <h2>Welcome Back!</h2>
+                <label>Username</label>
+                <input #loginUser type="text" placeholder="Enter username">
+                <label>Password</label>
+                <input #loginPass type="password" placeholder="Enter password">
+                <button type="button" (click)="onLogin(loginUser.value, loginPass.value)">Login</button>
+                <p>Don't have an account? <a (click)="setActive('signup')">Sign Up</a></p>
+            </form>
+
+            <form class="panel" [class.active]="activePanel==='login' ? 'translateX(0%)':'translateX(-50%)'">
+                <h2>Create Account</h2>
+            </form>
+
+        </div>
+ -->
+
+
+
+<!-- | Binding Type         | Syntax                          | Use Case                                  |
+| -------------------- | ------------------------------- | ----------------------------------------- |
+| **Interpolation**    | `{{ expression }}`              | Show data in template                     |
+| **Property binding** | `[property]="expression"`       | Set DOM element property                  |
+| **Class binding**    | `[class.className]="condition"` | Add/remove CSS class dynamically          |
+| **Style binding**    | `[style.color]="colorValue"`    | Set inline styles dynamically             |
+| **Event binding**    | `(event)="handler()"`           | Respond to user events                    |
+| **Two-way binding**  | `[(ngModel)]="value"`           | Bind input elements to component variable | -->

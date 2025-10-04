@@ -1,0 +1,225 @@
+/* --- General Styles & Typography --- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding: 30px;
+}
+
+h2, h3, h4 {
+  color: #2c3e50;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 8px;
+  margin-top: 25px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Upload Area Styles --- */
+.upload-container {
+  text-align: center;
+  padding: 50px;
+  border: 3px dashed #bdc3c7;
+  border-radius: 10px;
+  background-color: #fcfcfc;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.upload-container:hover {
+  border-color: #3498db;
+  background-color: #f5faff;
+}
+
+.upload-container h4 {
+  margin-top: 0;
+}
+
+.upload-container p {
+  font-style: italic;
+  color: #7f8c8d;
+}
+
+input[type="file"] {
+  display: none; /* Hides the default file input button */
+}
+
+.custom-file-upload {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* --- Dashboard Elements --- */
+.dashboard-controls {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.dashboard-controls > div {
+  flex: 1;
+}
+
+.dashboard-controls label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.dashboard-controls select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+pre {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 400px;
+  overflow: auto;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* --- Table Styles --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+thead tr {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e8f5ff;
+}
+
+/* --- Log Table Styles --- */
+.log-table {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.log-header, .log-row {
+  display: grid;
+  grid-template-columns: 180px 120px 1fr;
+  align-items: center;
+  padding: 12px;
+}
+
+.log-header {
+  font-weight: bold;
+  background-color: #34495e;
+  color: white;
+}
+
+.log-row:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.log-row:hover {
+  background-color: #e8f5ff;
+}
+
+.log-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Log Level Colors --- */
+.Critical {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.Error {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+.Warning {
+  color: #f39c12;
+}
+
+.Information {
+  color: #2ecc71;
+}
+
+.Unknown {
+  color: #95a5a6;
+}
+
+#logChart {
+  width: 100%;
+  max-width: 800px;
+  height: 400px; /* required to make bars visible */
+}

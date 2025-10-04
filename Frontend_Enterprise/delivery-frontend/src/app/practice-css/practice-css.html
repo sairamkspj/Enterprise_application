@@ -1,0 +1,39 @@
+<div class="auth-wrap">
+  <div class="auth-head">
+    <div class="tab" [class.active]="activePanel==='login'" (click)="setActive('login')">Login</div>
+    <div class="tab" [class.active]="activePanel==='signup'" (click)="setActive('signup')">Signup</div>
+  </div>
+
+  <div class="form-wrap">
+    <div class="forms" >
+      
+      <!-- Login Form -->
+      <form class="panel" *ngIf="activePanel === 'login'" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" >
+        <h2>Login</h2>
+        <label for="login-username">Username</label>
+        <input id="login-username" formControlName="username">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" formControlName="password">
+
+        <button type="submit" [disabled]="loginForm.invalid">Login</button>
+      </form>
+
+      <!-- Signup Form -->
+      <form class="panel" *ngIf="activePanel === 'signup'" [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()" >
+        <h2>Signup</h2>
+
+        <label for="signup-username">Username</label>
+        <input id="signup-username" formControlName="username">
+
+        <label for="signup-email">Email</label>
+        <input id="signup-email" formControlName="email">
+
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" formControlName="password">
+
+        <button type="submit" [disabled]="signupForm.invalid">Signup</button>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+{"status": "SUCCESS", "result": {"error": "Failed to process log file with python-evtx: type object 'Evtx' has no attribute 'Evtx'"}, "traceback": null, "children": [], "date_done": "2025-09-25T07:03:59.667215+00:00", "task_id": "960dc913-d704-4859-bbbf-f7d8fa48e89e"}

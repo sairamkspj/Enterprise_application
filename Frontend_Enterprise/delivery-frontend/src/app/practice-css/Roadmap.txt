@@ -1,0 +1,286 @@
+📌 Step 1 – Requirements & Planning (Documentation Style)
+🎯 Project Goal
+
+Build a Food Delivery System where users can order food online from restaurants.
+Stack: Angular (UI) + Django (API) + PostgreSQL (DB).
+We will apply real-world best practices: clean architecture, modular design, API standards, authentication, scalability.
+
+👥 Roles & Permissions
+
+Customer
+
+Register/login.
+
+Browse restaurants and food items.
+
+Add items to cart, place order, track order.
+
+Make payments.
+
+Restaurant/Vendor
+
+Register/login.
+
+Add/update menu items with images, price, availability.
+
+View incoming orders, update status (Preparing → Out for delivery → Completed).
+
+Admin
+
+Approve/verify restaurants.
+
+Manage users and vendors.
+
+Access reports (top-selling restaurants, revenue, active users).
+
+📦 Core Modules
+
+Authentication & Authorization
+
+JWT-based auth (Angular stores tokens, Django issues tokens).
+
+Role-based access (customer, vendor, admin).
+
+Restaurant Management
+
+Vendor registers a restaurant.
+
+Add food items (with name, description, image, price, category).
+
+Menu & Ordering
+
+Customers view menus.
+
+Add to cart, checkout, order tracking.
+
+Payments (Phase 2)
+
+Razorpay/Stripe integration.
+
+Admin Dashboard
+
+User management.
+
+Restaurant approval.
+
+Analytics (orders per day, revenue, active vendors).
+
+🗄️ Database Design (High-Level)
+
+Users Table
+
+id, username, email, password (hashed), role (customer/vendor/admin)
+
+Restaurant Table
+
+id, name, address, owner_id (FK → user), approved (boolean)
+
+FoodItem Table
+
+id, restaurant_id (FK → restaurant), name, description, price, image_url, is_available
+
+Order Table
+
+id, customer_id (FK → user), restaurant_id (FK → restaurant), status (pending, preparing, out_for_delivery, completed), created_at
+
+OrderItem Table
+
+id, order_id (FK → order), food_item_id (FK → food item), quantity, price
+
+⚙️ Best Practices (Real-Time)
+
+Backend (Django)
+
+Use Django REST Framework (DRF) for clean API design.
+
+Split into apps: users, restaurants, orders, payments.
+
+Use serializers & validators for data integrity.
+
+Apply role-based permissions at API level.
+
+Keep DB normalized (relations clear, no duplicate data).
+
+Frontend (Angular)
+
+Modular structure (auth, restaurant, orders, admin).
+
+Use Angular services for API calls.
+
+Use route guards for role-based navigation.
+
+Handle state with RxJS & BehaviorSubject.
+
+Use lazy loading for performance.
+
+Database (PostgreSQL)
+
+Index frequently queried columns (like restaurant_id, user_id).
+
+Use UUIDs for IDs in production (instead of auto increment).
+
+Store images in cloud (S3/Cloudinary), not in DB.
+
+
+📌 Step 7 — ER Diagram for Users & Roles
+1. Users Table (Core)
+Column	Type	Description
+id	UUID / SERIAL	Primary Key, unique user ID
+username	VARCHAR(150)	Unique login name
+email	VARCHAR(255)	Unique email
+password	TEXT (hashed)	Stored securely (Django hashes automatically)
+role	ENUM(customer, vendor, admin)	Determines permissions & access
+created_at	TIMESTAMP	Account creation time
+updated_at	TIMESTAMP	Last profile update
+is_active	BOOLEAN	Soft delete (disable account without removing row)
+2. Relationships (Future Planning)
+
+Vendor → Restaurant
+
+One-to-one or one-to-many: each vendor can own multiple restaurants.
+
+Customer → Orders
+
+One-to-many: a customer can have multiple orders.
+
+Restaurant → FoodItems
+
+One-to-many: restaurant has multiple menu items.
+
+Real-time thought: By defining these relationships upfront, later APIs (like fetching vendor’s menu or customer’s orders) become trivial.
+
+3. Visual ER Sketch (Text Version)
+Users
+┌─────────────┐
+│ id          │ PK
+│ username    │
+│ email       │
+│ password    │
+│ role        │ customer/vendor/admin
+│ created_at  │
+│ updated_at  │
+│ is_active   │
+└─────────────┘
+
+Vendor 1 ──── * Restaurant
+Customer 1 ──── * Orders
+Restaurant 1 ──── * FoodItems
+----------------------------------------------------------------------
+Full-Stack Project Documentation (Current Status)
+1. Backend (Django + PostgreSQL)
+
+Goal: Handle users, restaurants, food items, authentication, and orders.
+
+Current Steps Completed:
+
+Django project delivery_system created.
+
+PostgreSQL database configured.
+
+Created custom User model with fields like username, email, role, created_at.
+
+Attempted makemigrations and migrate.
+
+Mistakes / Issues Encountered:
+
+Adding created_at with auto_now_add=True gave error:
+
+Reason: Existing rows in DB need a default.
+
+Fix: Either remove existing tables or provide a default timestamp.
+
+Migration still fails if old tables exist — need to drop tables manually or reset migrations during early development.
+
+Confusion about model fields and defaults: always think about existing data vs new fields.
+
+Next Step:
+
+Make sure User model is properly migrated.
+
+Create Restaurant and FoodItem models with foreign key relationships.
+
+Add image fields for food items.
+
+2. Frontend (Angular)
+
+Goal: Build responsive UI for login, signup, restaurant listings, food items, and order forms.
+
+Current Steps Completed:
+
+Angular project created (delivery-frontend).
+
+Created login/signup forms with tabs (.auth-wrap).
+
+Implemented sliding forms using:
+
+.forms-viewport with overflow: hidden
+
+.forms with width: 200%
+
+transform: translateX(...) and transition for sliding effect.
+
+Experimented with flex layouts:
+
+.tabs uses display: flex and flex: 1 for equal-width tabs.
+
+Styling:
+
+Learned effects of margin, padding, box-shadow, border-radius, font-family.
+
+Mistakes / Issues Encountered:
+
+[class.active] binding syntax mistake caused Angular parser error.
+
+.forms-viewport width/height misalignment → forms visible outside parent.
+
+Confusion about flex:1 vs width:100% and why some content wasn’t aligning.
+
+Input box border looked weird after adding border-radius → minor styling fix needed (border: 1px solid #ccc instead of 1xp typo).
+
+Trying to move text (“siva”) inside flex container — confusion between margin (moves box) vs padding (moves content inside box).
+
+Next Step:
+
+Fix the tab sliding fully functional.
+
+Connect Angular forms to Django APIs.
+
+Add image display for food items dynamically.
+
+3. Database / Images
+
+Goal: Store users, restaurants, food items, and images in PostgreSQL.
+
+Current Status:
+
+Users table attempted.
+
+Image storage not yet implemented.
+
+Relations like Restaurant → FoodItem pending.
+
+Mistakes / Issues Encountered:
+
+Trying to insert new fields in existing tables without considering default values.
+
+Confusion about how frontend will fetch images (need proper media folder + Django settings).
+
+Next Step:
+
+Create tables for restaurants and food items.
+
+Add image fields and configure media folder (MEDIA_URL, MEDIA_ROOT) in Django.
+
+Connect Angular to fetch images via API.
+
+✅ Key Learnings So Far
+
+Django migrations: always think about existing data before adding fields.
+
+Flexbox in Angular: display: flex + flex: 1 makes responsive layouts easier than floats or inline-block.
+
+Overflow & translateX: sliding forms need parent overflow: hidden to hide extra content.
+
+Margin vs Padding: margin moves the box, padding moves content inside the box.
+
+Angular class binding: syntax must be exact ([class.active]="condition"), errors break template compilation.

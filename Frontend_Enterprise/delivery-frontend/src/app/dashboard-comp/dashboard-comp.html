@@ -1,0 +1,79 @@
+<p>dashboard-comp works!</p>
+<div class="container mt-4">
+    <h2 class="text-primary">dashboard</h2>
+    <div class="mb-3">
+        <input [(ngModel)]="searchText" placeholder="searchproductlist" class="form-control mb-2">
+        <button class="btn btn-sm btn-info me-2" (click)="gridView=!gridView">
+            Toggle {{gridView ? 'List View': 'Grid View'}}
+        </button>
+
+        <button class="btn btn-sm btn-warning" (click)="showOutOfStock=!showOutOfStock" >
+            {{showOutOfStock ? 'Hide Out-of-Stock' :'Show Out-Of-Stock'}}
+        </button>
+    </div>
+    <!-- <div *ngIf="gridView; else listView" class="row">
+        <div *ngFor="let product of products;let i=index" class="col-md-3 mb-3" [hidden]="!showOutOfStock && product.stock ===0"
+         [ngClass]="{'border border-success':product.discount,'border border-danger':product.stock===0}">
+            <div class="card p-2 shadow-sm">
+                <h5>{{product.name}}</h5>
+
+            </div>
+        </div>
+
+    </div>
+
+    <ng-template #listView>
+        <ul class="list-group">
+            <li *ngFor="let product of products" class="list-group-item d-flex justify-content-bettwen align-items-center"
+            *ngIf="showOutOfStock || product.stock > 0">
+
+                <span>
+                    {{product.name}}-₹ {{product.price}}
+                    <span *ngIf="product.discount" class="badge bg-success ms-2">
+                        Discount
+
+                    </span>
+
+                </span>
+                <span [ngStyle]="{'color': product.stock===0 ? 'red' : 'green'}">
+                    {{product.stock > 0 ? product.stock + ' available' : 'Out of stock'}}
+                </span>
+
+            </li>
+        </ul>
+    </ng-template> -->
+    <!-- GRID VIEW -->
+    <div *ngIf="gridView; else listView" class="row">
+    <div *ngFor="let product of filteredProducts; let i = index"
+        class="col-md-3 mb-3"
+        [ngClass]="{'border border-success':product.discount,
+                    'border border-danger':product.stock===0}">
+        <div class="card p-2 shadow-sm">
+        <h5>{{product.name}}</h5>
+        </div>
+    </div>
+    </div>
+
+    <!-- LIST VIEW -->
+    <ng-template #listView>
+    <ul class="list-group">
+        <li *ngFor="let product of filteredProducts"
+            class="list-group-item d-flex justify-content-between align-items-center">
+
+        <span>
+            {{product.name}} - ₹ {{product.price}}
+            <span *ngIf="product.discount" class="badge bg-success ms-2">Discount</span>
+        </span>
+
+        <span [ngStyle]="{'color': product.stock===0 ? 'red' : 'green'}">
+            {{product.stock > 0 ? product.stock + ' available' : 'Out of stock'}}
+        </span>
+        </li>
+    </ul>
+    </ng-template>
+
+</div>
+
+
+
+

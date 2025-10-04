@@ -1,0 +1,1 @@
+{"status": "SUCCESS", "result": {"error": "Failed to process log file with python-evtx: 'module' object is not callable"}, "traceback": null, "children": [], "date_done": "2025-09-25T06:59:28.419142+00:00", "task_id": "68e3c3e3-c2f3-440b-b293-592fef74e09f"}

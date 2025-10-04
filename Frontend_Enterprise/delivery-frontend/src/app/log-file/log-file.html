@@ -1,0 +1,74 @@
+<p>log-file works!</p>
+
+<div class="main-container">
+  <div class="upload-container">
+    <div>
+      <h4>Drag and drop your files here</h4>
+      <input type="file" (change)="onFileSelected($event)" accept=".log,.evtx,.txt" />
+      <label for="file-input" class="custom-file-upload">Choose File</label>
+      <p *ngIf="selectedFile">Selected file: {{ selectedFile.name }}</p>
+      <button (click)="onUpload()" [disabled]="!selectedFile">Upload</button>
+    </div>
+  </div>
+
+  <div>
+    <h2>Log Processor Dashboard</h2>
+    <div class="dashboard-controls">
+      <div>
+        <label for="log-source">Select Log Source:</label>
+        <select id="log-source" [(ngModel)]="logSource">
+          <option value="windows">Windows Event Viewer</option>
+          <option value="linux">Linux Syslogs</option>
+          <option value="hdfs">HDFS Logs</option>
+          <option value="application">Application Logs</option>
+        </select>
+      </div>
+      <button (click)="processLogs()">Process Log Files</button>
+    </div>
+
+    <h3>Response:</h3>
+    <pre>{{ response | json }}</pre>
+
+    <h3>Counts Table:</h3>
+      <table *ngIf="counts" border="1" cellpadding="5" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Log</th>
+            <th>Critical / Audit Success</th>
+            <th>Error / Audit Failure</th>
+            <th>Warning</th>
+            <th>Information</th>
+            <th>Unknown</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of counts | keyvalue">
+            <td>{{ log.key }}</td>
+            <td>{{ log.key==='Security' ? log.value?.['Audit Success'] ?? 0 : log.value?.Critical ?? 0 }}</td>
+            <td>{{ log.key==='Security' ? log.value?.['Audit Failure'] ?? 0 : log.value?.Error ?? 0 }}</td>
+            <td>{{ log.key==='Security' ? 0 : log.value?.Warning ?? 0 }}</td>
+            <td>{{ log.key==='Security' ? 0 : log.value?.Information ?? 0 }}</td>
+            <td>{{ log.value?.Unknown ?? 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+    <h3 *ngIf="counts">Stacked Bar Chart</h3>
+    <canvas #logChart id="logChart"></canvas>
+  </div>
+</div>
+
+<div class="log-table" *ngIf="unusualLogs.length > 0">
+  <div class="log-header">
+    <div class="log-cell">Timestamp</div>
+    <div class="log-cell">Log Level</div>
+    <div class="log-cell">Message</div>
+  </div>
+  <div class="log-row" *ngFor="let log of unusualLogs">
+    <div class="log-cell">{{ log.timestamp }}</div>
+    <div class="log-cell" [ngClass]="log.log_level">{{ log.log_level }}</div>
+    <div class="log-cell">{{ log.message }}</div>
+  </div>
+</div>

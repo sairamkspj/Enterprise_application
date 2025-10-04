@@ -1,0 +1,42 @@
+<p>auth works!</p>
+<div class="auth-wrap">
+
+  <!-- Tabs -->
+  <div class="tab-row">
+    <div class="tabs">
+      <div class="tab" [class.active]="activePanel==='login'" (click)="setActive('login')">Login</div>
+      <div class="tab" [class.active]="activePanel==='signup'" (click)="setActive('signup')">Sign Up</div>
+    </div>
+  </div>
+
+  <!-- Forms -->
+  <div class="forms-viewport">
+    <div class="forms" [style.transform]="activePanel==='login' ? 'translateX(0%)' : 'translateX(-50%)'">
+
+      <!-- LOGIN -->
+      <form class="panel" >
+        <h2>Welcome Back!</h2>
+        <label>Username</label>
+        <input #loginUser type="text" placeholder="Enter username">
+        <label>Password</label>
+        <input #loginPass type="password" placeholder="Enter password">
+        <button type="button" (click)="onLogin(loginUser.value, loginPass.value)">Login</button>
+        <p>Don't have an account? <a (click)="setActive('signup')">Sign Up</a></p>
+      </form>
+
+      <!-- SIGNUP -->
+      <form class="panel" [class.active]="activePanel==='signup'" [class.inactive]="activePanel!=='signup'">
+        <h2>Create Account</h2>
+        <label>Username</label>
+        <input #signupUser type="text" placeholder="Choose username">
+        <label>Email</label>
+        <input #signupEmail type="email" placeholder="Enter email">
+        <label>Password</label>
+        <input #signupPass type="password" placeholder="Choose password">
+        <button type="button" (click)="onSignup(signupUser.value, signupEmail.value, signupPass.value)">Sign Up</button>
+        <p>Already have an account? <a (click)="setActive('login')">Login</a></p>
+      </form>
+
+    </div>
+  </div>
+</div>

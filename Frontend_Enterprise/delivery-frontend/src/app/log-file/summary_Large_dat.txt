@@ -1,0 +1,623 @@
+
+(venv) C:\Users\HP\Desktop\Enterprise_application\Backend_Enterprise\delivery_system>celery -A delivery_system worker --loglevel=info -P solo
+Log Processing System – Documentation
+
+
+1. Overview
+
+This system allows users to process large log files (Windows Event Viewer, Linux syslogs, HDFS, Application logs) via a Django backend and an Angular frontend.
+Features include:
+
+Dynamic parsing of log files (no hardcoded paths).
+
+Counting events by severity levels: Critical, Error, Warning, Information, Unknown.
+
+Async processing with Celery to handle large files.
+
+Frontend dashboard with file upload, log source selection, results table, and stacked bar chart.
+
+2. Backend (Django + Celery)
+a) Project Structure
+delivery_system/
+├─ logfile/
+│  ├─ tasks.py            # Celery tasks for processing logs
+│  ├─ views.py            # File upload and task status views
+│  ├─ views_big_file.py   # Log processing trigger view
+│  ├─ urls.py             # URL routing
+│
+├─ delivery_system/
+│  ├─ celery.py           # Celery configuration
+│
+manage.py
+
+b) Celery Tasks
+
+process_single_evtx_file(file_path) → Process single Windows EVTX file.
+
+process_windows_event_logs(logs_to_check) → Dynamically process Application, System, Setup logs.
+
+process_linux_logs(path) → Placeholder for Linux syslogs parser.
+
+Uses pywin32 for Windows EventViewer logs.
+
+c) Views
+
+LogFileUploadView → Handles file uploads.
+
+process_logs(request) → Starts Celery task based on log source.
+
+task_status(request, task_id) → Returns Celery task state & results.
+
+d) URLs
+urlpatterns = [
+    path('upload/', LogFileUploadView.as_view(), name='logfile-upload'),
+    path('process-logs/', process_logs, name='process_logs'),
+    path('task-status/<str:task_id>/', task_status, name='task_status'),
+]
+
+3. Frontend (Angular)
+a) Components
+
+LogUploadComponent:
+
+File upload and selection.
+
+Log source selection dropdown.
+
+Trigger log processing and poll task status.
+
+Display counts in a table.
+
+Show unusual logs and charts.
+
+b) Service
+
+logfile_Service handles API calls:
+
+Send_data(data)         // POST upload file
+processLogs(source)     // GET process logs
+getTaskStatus(taskId)   // GET task status
+
+c) Template
+
+Drag-and-drop file upload.
+
+Dropdown for log source (Windows/Linux/HDFS/Application).
+
+Table showing severity counts per log.
+
+JSON response display.
+
+Chart.js stacked bar chart for visual comparison.
+
+4. Workflow
+
+User selects log source in Angular UI.
+
+Clicks Process Logs.
+
+Angular calls Django API: /logfile/process-logs/?source=windows.
+
+Django triggers Celery task asynchronously.
+
+Frontend receives task_id and polls /logfile/task-status/<task_id>/.
+
+On SUCCESS, results displayed in table + chart.
+
+5. Key Packages
+
+Django 5.2.6 – Web framework
+
+Celery 5.5.3 – Async task queue
+
+pywin32 – Access Windows Event Viewer
+
+python-evtx 0.8.1 – Parse EVTX log files
+
+Angular 17 – Frontend UI
+
+Chart.js – Visualization
+
+6. Notes
+
+Windows EVTX parser must use with EvtxFile(path) as log to avoid TypeError.
+
+For huge log files, Celery async prevents blocking backend.
+
+Supports dynamic log source selection (Windows/Linux/HDFS).
+
+Upload path configurable (FileSystemStorage).
+
+This can serve as your internal documentation or a starting point for project handover.
+
+----------------------------------------------------------------
+{
+  Application: { Critical: 0, Error: 50, Warning: 317, Information: 3870, Unknown: 23 },
+  System: { Critical: 0, Error: 85, Warning: 1150, Information: 6917, Unknown: 0 },
+  Setup: { Critical: 0, Error: 50, Warning: 317, Information: 3870, Unknown: 23 }
+}
+
+The counts (Critical, Error, Warning, Information, Unknown) are based on the <Level> field in each EVTX event. Only events with a recognized level increase the respective counter; anything unrecognized goes to Unknown.
+Record<string, LogCounts>;->this makes the coming objects as dictionary and for logcounts we define a interface.
+->
+!this.counts checks falsy values in JavaScript/TypeScript.
+
+Falsy values include: null, undefined, 0, '' (empty string), false, and NaN.
+
+In our case, this.counts is expected to be an object (like Record<string, LogCounts>).
+In JavaScript: ! is logical NOT. For example, !true → false.
+
+In TypeScript: ! after a variable is a non-null assertion. It tells the compiler:
+If this.counts is null or undefined → !this.counts is true → early return. ✅
+
+If this.counts is an empty object {} → !this.counts is false → it does not stop rendering.
+
+If this.counts has numbers that are 0 inside, the object itself still exists → !this.counts is false → it will render (with 0s in the table). ✅
+<-
+````
+Object.keys(this.counts) returns an array of the top-level keys:
+
+->this works only for arrays it proceess and provide new arry.
+const newArray = oldArray.map((element, index, array) => {}
+const numbers = [1, 2, 3, 4];
+const squares = numbers.map(num => num * num);
+console.log(squares); // [1, 4, 9, 16]
+
+
+const users = [
+  { name: 'Alice', age: 25 },
+  { name: 'Bob', age: 30 }
+];
+
+const names = users.map(u => u.name);
+console.log(names); // ['Alice', 'Bob']
+
+`````````
+
+forEach – loop through each element (no return):
+
+numbers.forEach((num) => console.log(num));
+
+
+filter – return only elements matching a condition:
+
+const even = numbers.filter((num) => num % 2 === 0);
+console.log(even); // [2,4]
+
+
+reduce – combine elements to single value:
+
+const sum = numbers.reduce((acc, num) => acc + num, 0);
+console.log(sum); // 10
+`````````````````````````````
+from Evtx.Evtx import Evtx
+
+evtx_file_path = r"C:\Users\HP\Desktop\LoGs\Setup.evtx"
+with Evtx(evtx_file_path) as log:
+    for i, record in enumerate(log.records()):
+        print(record.xml()[:500])
+        if i >= 3:
+            break
+`````````````````````
+Call Stack: Executes functions in order. Async callbacks only run when stack is empty.
+
+Heap: Stores all objects (like counts, subscriptions, task IDs) so async callbacks can access them.
+
+Web APIs: Handle timers, HTTP requests, etc., without blocking stack.
+
+Event Queue: Holds callbacks waiting for stack to execute them.
+
+Result: Multiple async operations (HTTP call, polling, chart rendering) run “in parallel” while JS remains single-threaded.
+``````````````````````````````````````````````````````````````````````````````````````````````````
+Task:
+Celery: A framework used to run the log-processing code in the background as a separate task. This prevents the main application from freezing.
+
+win32evtlog: A Python library that acts as an interface to the Windows Event Log API. It reads binary log data and converts it into structured Python objects you can easily work with.
+
+Nested Loops: The code uses two main loops.
+
+The outer while loop is for batch processing. It repeatedly calls win32evtlog.ReadEventLog() to fetch chunks of event data.
+
+The inner for loop is for individual event processing. It iterates over each object within a batch, allowing your code to inspect and categorize each event.
+
+Event Objects: The win32evtlog library returns a list of Python objects, with each object representing a unique log entry. These objects have different attributes for various data points, such as:
+
+EventType (a number): Indicates the event's severity (e.g., Error, Warning, Information).
+
+EventID (a number): A unique identifier for the specific type of event.
+
+Message (a string): The human-readable text of the log entry.
+
+Constants: The code uses constants like win32evtlog.EVENTLOG_ERROR_TYPE to represent integer values. This makes the code more readable and maintainable than using raw numbers.
+
+In short, the code is a well-structured and efficient way to process Windows Event Logs without overwhelming the system's memory, using standard Python libraries and best practices.
+
+
+````````````````````````````````````````````````````````````````````````
+Observable, Pipe, Subscribe, and switchMap – Full Notes
+1️⃣ Observables
+
+Observables are streams of values over time.
+
+Can emit multiple values, not just one.
+
+Values are received sequentially by subscribers.
+
+Examples:
+
+of(10, 20, 30);           // emits 3 values immediately
+interval(1000);            // emits 0,1,2,… every 1 second
+http.get('/task-status');  // emits HTTP response when ready
+
+2️⃣ subscribe()
+
+Consumes the Observable.
+
+Triggers execution (Observables are “cold” until subscribed).
+
+Receives values one by one.
+
+Returns a Subscription object (can unsubscribe).
+
+Example:
+
+obs$.subscribe(val => console.log(val));
+
+3️⃣ pipe()
+
+Chains operators to transform or filter values.
+
+Returns a new Observable.
+
+Does not execute the Observable by itself.
+
+Example:
+
+obs$.pipe(
+  map(x => x*10),
+  filter(x => x>10)
+);
+
+
+Key point: multiple operators → single Observable (newObs$) → subscriber sees processed values.
+
+4️⃣ Nested subscribe vs pipe
+
+Old style (nested subscribe)
+
+interval(1000).subscribe(() => {
+  http.get('/task-status').subscribe(res => console.log(res));
+});
+
+
+Messy, manual unsubscribe needed, overlapping requests possible.
+
+RxJS pipe style
+
+interval(1000).pipe(
+  switchMap(() => http.get('/task-status'))
+).subscribe(res => console.log(res));
+
+
+Clean, automatic handling of emissions, latest value only, no nested subscribe.
+
+5️⃣ Real-time flow
+
+Observable emits value → passes through operators in pipe() → reaches subscriber.
+
+Each emitted value is processed one by one.
+
+Operators like map, filter, takeWhile process values sequentially.
+
+Example timeline for interval + map + filter:
+
+Tick 0 → map → filter → rejected
+Tick 1 → map → filter → rejected
+Tick 2 → map → filter → passed → subscriber sees value
+
+6️⃣ switchMap and inner Observables
+
+Maps outer Observable emission → inner Observable.
+
+Cancels previous inner Observable if a new outer emission occurs.
+
+Only latest inner Observable values are passed downstream.
+
+Other operators after switchMap (map, filter, takeWhile) process inner Observable values, not outer ticks.
+
+Other mapping operators:
+
+Operator	Behavior
+switchMap	Only latest inner Observable active, previous canceled
+mergeMap	Keep all inner Observables active, all results emitted
+concatMap	Queue inner Observables, one completes before starting next
+7️⃣ What res is in subscribe
+interval(1000).pipe(
+  switchMap(() => http.get('/task-status'))
+).subscribe(res => console.log(res));
+
+
+res = HTTP response from inner Observable (http.get).
+
+Not the interval tick.
+
+Typically a JSON object from backend, e.g.,
+
+{
+  "state": "SUCCESS",
+  "result": { "Application": { "Error": 5, "Warning": 2 } }
+}
+
+8️⃣ Summary analogies
+
+pipe() → conveyor belt with machines transforming each value.
+
+subscribe() → worker picking up each value at the end.
+
+switchMap → replaces old items if new one comes before processing finishes.
+
+Multiple Observables = multiple streams that can emit over time.
+
+✅ High-level understanding
+
+Observables = streams → can emit multiple values.
+
+pipe() = chain processing operators → returns single transformed Observable.
+
+subscribe() = execute Observable → get processed values one by one.
+
+switchMap → ensures only the latest inner Observable is active.
+
+Use mergeMap / concatMap if all inner Observable values are needed.
+````````````````````````````````````````
+Absolutely! Let’s go step by step and summarize everything we did and why in your Django + Celery + Redis + Windows setup. I’ll break it down in logical order so it makes sense.
+
+1. The Goal
+
+We wanted to process Windows Event Logs in the background using a Django project.
+Key components:
+
+Django → the main web backend.
+
+Celery → background task manager (asynchronous task execution).
+
+Redis → message broker (Celery uses it to send tasks).
+
+NSSM → runs Celery worker as a Windows service.
+
+Windows Event Logs → source data we want to analyze.
+
+2. Install and Set Up Redis
+
+Redis is the message broker for Celery.
+
+Steps we did:
+
+Downloaded Redis for Windows and extracted it.
+
+Started Redis manually:
+
+redis-server.exe
+
+
+Tested connection with CLI:
+
+redis-cli.exe -h 127.0.0.1 ping
+
+
+✅ Got PONG → Redis is working.
+
+Optional: Installed Redis as a Windows service:
+
+redis-server.exe --service-install redis.windows.conf
+redis-server.exe --service-start
+
+
+Why Redis is needed:
+
+Celery workers poll Redis for new tasks.
+
+The Django app sends tasks to Redis, worker picks them up.
+
+3. Django Project Configuration
+
+Set DJANGO_SETTINGS_MODULE in Celery app:
+
+import os
+from celery import Celery
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "delivery_system.settings")
+
+app = Celery(
+    'delivery_system',
+    broker='redis://127.0.0.1:6379/0',  # broker URL
+    backend='redis://127.0.0.1:6379/0',  # result backend
+)
+
+app.config_from_object("django.conf:settings", namespace="CELERY")
+app.autodiscover_tasks()
+
+
+Why:
+
+Tells Celery where to find Django settings.
+
+Configures broker (Redis) and result backend.
+
+Enables autodiscover to find tasks in your apps.
+
+4. Celery Task for Windows Event Logs
+
+Created process_windows_event_logs task using @shared_task.
+
+Reads Windows Event Logs: Application, System, Setup, Security.
+
+Uses win32evtlog and win32security to get logs.
+
+Enabled SeSecurityPrivilege for Security logs.
+
+Returns a dictionary with total events and severity counts.
+
+Example result:
+
+{
+  'Application': {'total_records': 4776, 'severity_counts': {...}},
+  'System': {'total_records': 9006, 'severity_counts': {...}},
+  'Setup': {'total_records': 4776, 'severity_counts': {...}},
+  'Security': {'total_records': 22704, 'severity_counts': {...}}
+}
+
+5. Running Celery Worker
+
+Initially, we had issues because:
+
+Celery could not connect to Redis → WinError 10061.
+
+Causes:
+
+Redis not running.
+
+Firewall blocking connection.
+
+Wrong broker URL.
+
+Fixes:
+
+Started Redis manually and confirmed PONG.
+
+Temporarily turned off Windows firewall:
+
+netsh advfirewall set allprofiles state off
+
+
+Confirmed broker URL in celery.py:
+
+broker='redis://127.0.0.1:6379/0'
+
+
+Ran worker manually:
+
+celery -A delivery_system worker --loglevel=info
+
+
+✅ Worker connected to Redis and was ready.
+
+6. Using NSSM for Windows Service
+
+Problem: Running Celery in CMD is temporary.
+
+Solution: Use NSSM to run it as a Windows service.
+
+Steps:
+
+Extracted nssm-2.24.zip.
+
+Installed Celery worker as a service:
+
+nssm install CeleryWorker
+
+
+Path → Python executable
+
+Startup directory → Django project folder
+
+Arguments → -m celery -A delivery_system worker --loglevel=info
+
+Started service:
+
+nssm start CeleryWorker
+
+
+Checked status:
+
+nssm status CeleryWorker
+
+
+✅ Now Celery runs in the background, auto-restarts on reboot, no CMD needed.
+
+7. Sending Tasks from Django Shell
+from logfile.tasks import process_windows_event_logs
+
+result = process_windows_event_logs.delay(["Application", "System", "Setup", "Security"])
+res = result.get(timeout=60)
+print(res)
+
+
+.delay() → sends task to Celery (non-blocking).
+
+result.get() → waits for task to finish and fetches results.
+
+Output: Dictionary with logs and severity counts.
+
+Issue we saw:
+
+ValueError: not enough values to unpack (expected 3, got 0)
+
+
+Cause: Celery was running with filesystem backend, not Redis.
+
+Fixed by switching to Redis backend in celery.py:
+
+backend='redis://127.0.0.1:6379/0'
+
+
+✅ After this, task returned correct results.
+
+8. Why We Did Things the Way We Did
+
+You mentioned your Django folder is separate and Redis is in environment:
+
+We used direct Redis URL instead of filesystem backend because:
+
+More reliable.
+
+Supports multiple workers.
+
+Avoids “not enough values to unpack” error.
+
+Firewall turned off:
+
+Sometimes Redis connections get blocked by Windows firewall.
+
+This ensures Celery can connect to Redis on 127.0.0.1:6379.
+
+NSSM:
+
+Makes Celery worker a proper Windows service, auto-restartable, production-friendly.
+
+Eliminates the need to keep CMD open.
+
+✅ Summary Flow
+
+Redis running → broker for Celery.
+
+Django + Celery configured → task sending & results backend.
+
+Celery worker runs (CMD / NSSM service).
+
+Tasks executed asynchronously → fetch results in Django shell.
+
+Firewall temporarily disabled to allow local Redis connection.
+
+--------------------------------------------
+How data flows (easy words)
+
+User uploads or selects log source
+
+Angular sends the request to Django.
+
+Django starts a task (Celery)
+
+Celery reads the logs in the background (so user doesn’t wait).
+
+Returns a task ID to Angular.
+
+Angular keeps checking the task status
+
+Polls the backend every second until Celery finishes.
+
+When the task finishes
+
+Django returns counts of events (errors, warnings, info…).
+
+Angular uses this data to fill the table and chart.

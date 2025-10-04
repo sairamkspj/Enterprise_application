@@ -1,0 +1,128 @@
+.auth-wrap {
+  width: 400px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.tab-row {
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid #eee;
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.tab.active {
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+}
+
+.forms-viewport {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.forms {
+  display: flex;
+  width: 200%;
+  transition: transform 0.5s ease;
+}
+
+forms.panel {
+  flex:1;
+  width: 100%;
+  padding: 20px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+form.panel.inactive {
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+form.panel.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #e6dcdc;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+p {
+  margin-top: 15px;
+  text-align: center;
+  color: #666;
+}
+
+a {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+/* 
+| **Group**                                 | **Purpose**                              | **Common Properties & Notes**                                                                                                                                                                                    |
+| ----------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Layout / Box Model**                    | Control element size, spacing, placement | `width`, `height`, `max-width`, `min-height`, `margin`, `padding`, `display` (block, inline, flex, grid), `position` (static, relative, absolute, fixed, sticky), `top/left/right/bottom`, `overflow`, `z-index` |
+| **Typography / Text**                     | Font, size, alignment, spacing           | `font-family`, `font-size`, `font-weight`, `line-height`, `text-align`, `text-decoration`, `text-transform`, `letter-spacing`, `word-spacing`, `white-space`, `color`                                            |
+| **Backgrounds / Borders**                 | Background color/image, borders, shadows | `background`, `background-color`, `background-image`, `border`, `border-radius`, `border-style`, `border-width`, `border-color`, `box-shadow`, `outline`                                                         |
+| **Colors & Visuals**                      | Colors, opacity, filters                 | `color`, `opacity`, `box-shadow`, `text-shadow`, `filter` (blur, brightness, contrast, grayscale), `gradient` (linear, radial)                                                                                   |
+| **Flexbox / Grid / Alignment**            | Modern layout system                     | **Flexbox:** `display: flex`, `flex-direction`, `justify-content`, `align-items`, `flex-wrap`<br>**Grid:** `display: grid`, `grid-template-columns`, `grid-template-rows`, `gap`, `grid-area`                    |
+| **Animation & Transitions**               | Movement & effects                       | `transition`, `transition-duration`, `transition-timing-function`, `animation`, `animation-name`, `animation-duration`, `animation-iteration-count`, `transform` (translate, rotate, scale, skew)                |
+| **Interaction / Cursor / Pseudo-classes** | User interaction                         | `cursor`, `pointer-events`<br>`:hover`, `:active`, `:focus`, `:checked`, `:disabled`                                                                                                                             |
+| **Others / Misc**                         | Miscellaneous                            | `clip-path`, `visibility`, `content` (for pseudo-elements), `user-select`, `white-space`                                                                                                                         | */

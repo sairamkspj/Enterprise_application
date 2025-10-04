@@ -1,0 +1,53 @@
+# ==========================
+# OS / Editor / IDE
+# ==========================
+.DS_Store
+*.swp
+*.swo
+*.idea/
+.vscode/
+
+# ==========================
+# Environment / Secrets
+# ==========================
+.env
+*.env
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# Python / Django
+# ==========================
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Django local files
+db.sqlite3
+media/
+staticfiles/
+*.pot
+*.pyc
+
+# Virtual environment
+Backend_Enterprise/venv/
+Backend_Enterprise/env/
+
+# ==========================
+# Node / Angular
+# ==========================
+# Dependencies
+Frontend_Enterprise/delivery-frontend/node_modules/
+
+# Angular build / cache
+Frontend_Enterprise/delivery-frontend/dist/
+Frontend_Enterprise/delivery-frontend/.angular/
+
+# Logs
+npm-debug.log
+yarn-error.log

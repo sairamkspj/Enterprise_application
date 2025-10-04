@@ -1,0 +1,39 @@
+<p>registration works!</p>
+<form (ngSubmit)="onSubmit()">
+    <label>Name:</label>
+    <input [(ngModel)]="Name" name="Name" required>
+    
+
+    <label>Email:</label>
+    <input [(ngModel)]="Email" name="Email" required>
+
+    <label>Password</label>
+    <input [(ngModel)]="Password" name="Password" required>
+
+    <label for="Role">Role:</label>
+    <select id="Role" [(ngModel)]="Role"  name="Role">
+        <option value="customer">Customer</option>
+        <option value="vendor">Vendor</option>
+        <option value="Driver">Driver</option>
+        <option value="Admin">Admin</option>
+    </select>
+
+    <div *ngIf="Role==='vendor'">
+        <label>Restaurent_name:</label>
+        <input [(ngModel)]="Restaurent_name" name="Restaurent_name">
+
+        <label>Contact_number:</label>
+        <input [(ngModel)]="Contact_number" name="Contact_number">
+
+        <label>Location:</label>
+        <input [(ngModel)]="Location" name="Location">
+    </div>
+        
+
+    <button type="submit">Submit</button>
+
+    <div *ngIf="User_reg_sucess">
+        <a routerLink="login" class="btn btn-success">Go to Login</a>
+    </div>
+
+</form>

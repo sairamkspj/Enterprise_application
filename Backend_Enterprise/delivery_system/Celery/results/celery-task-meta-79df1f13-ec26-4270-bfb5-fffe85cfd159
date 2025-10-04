@@ -1,0 +1,1 @@
+{"status": "SUCCESS", "result": {"Setup.evtx": {"Critical": 0, "Error": 0, "Warning": 0, "Information": 1354}}, "traceback": null, "children": [], "date_done": "2025-09-25T08:09:30.045484+00:00", "task_id": "79df1f13-ec26-4270-bfb5-fffe85cfd159"}
